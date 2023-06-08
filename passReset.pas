@@ -264,91 +264,105 @@ end;
 
 
 function TfrmpassReset.ValidatePassword(const Password: string): Boolean;
-var
-  Min: TRegEx;
-  Max: TRegEx;
-  CE: TRegEx;
-  Num: TRegEx;
-  Regex: TRegEx;
 
+var
+mayuscula : Boolean;
+  longuitud: Boolean;
   minuscula: Boolean;
-  mayuscula: Boolean;
   numero: Boolean;
   caracter: Boolean;
-  longuitud: Boolean;
+
 begin
-  // Expresión regular para validar una letra mayúscula y una letra minúscula
-  // Regex := TRegEx.Create('^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$');
 
-  Min := TRegEx.Create('^(?=.*[a-z]).*$');
-  Max := TRegEx.Create('^(?=.*[A-Z]).*$');
-  Num := TRegEx.Create('^(?=.*[0-9]).*$');
-  CE := TRegEx.Create('^(?=.*\W).*$');
+  var
+  cMayus := 0;
+  var
+  cMinus := 0;
+  var
+  cDig := 0;
+  var
+  cEsp := 0;
 
-  // Result := Min.IsMatch(Password);
+  for var I := 0 to (Length(Password) - 1) do
+  begin
+    var
+    c := Password.chars[I];
+    case c of
 
-  if Min.IsMatch(Password) then
+      'A' .. 'Z':
+        inc(cMayus);
+      'a' .. 'z':
+        inc(cMinus);
+      '0' .. '9':
+        inc(cDig);
+    else
+      inc(cEsp);
+    end;
+
+  end;
+
+  if cMinus > 0 then
   begin
     Label2.TextSettings.FontColor := TAlphaColorRec.Green;
-    minuscula := true;
+    minuscula := True;
   end
   else
   begin
     Label2.TextSettings.FontColor := TAlphaColorRec.Crimson;
-    minuscula := False;
+    minuscula := false;
   end;
 
-  if Max.IsMatch(Password) then
+  if cMayus > 0 then
   begin
     Label1.TextSettings.FontColor := TAlphaColorRec.Green;
-    mayuscula := true;
+    mayuscula := True;
   end
   else
   begin
     Label1.TextSettings.FontColor := TAlphaColorRec.Crimson;
-    mayuscula := False;
+    mayuscula := false;
   end;
 
-  if CE.IsMatch(Password) then
+  if cEsp > 0 then
   begin
     Label4.TextSettings.FontColor := TAlphaColorRec.Green;
-    caracter := true;
+    caracter := True;
 
   end
   else
   begin
     Label4.TextSettings.FontColor := TAlphaColorRec.Crimson;
-    caracter := False;
+    caracter := false;
   end;
 
-  if Num.IsMatch(Password) then
+  if cDig > 0 then
   begin
     Label3.TextSettings.FontColor := TAlphaColorRec.Green;
-    numero := true;
+    numero := True;
   end
   else
   begin
     Label3.TextSettings.FontColor := TAlphaColorRec.Crimson;
-    numero := False;
+    numero := false;
   end;
 
   if Length(Password) >= 8 then
   begin
     Label5.TextSettings.FontColor := TAlphaColorRec.Green;
-    longuitud := true;
+    longuitud := True;
   end
   else
   begin
     Label5.TextSettings.FontColor := TAlphaColorRec.Crimson;
-    longuitud := False;
+    longuitud := false;
   end;
 
-  if  (minuscula) and (mayuscula) and (numero) and (caracter) and (longuitud) then
-  Result := True
+  if (minuscula) and (mayuscula) and (numero) and (caracter) and (longuitud)
+  then
+    Result := True
   else
-  Result := False;
+    Result := false;
 
-  end;
-
+end;
 
 end.
